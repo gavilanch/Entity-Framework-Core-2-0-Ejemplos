@@ -12,7 +12,7 @@ namespace EFCoreEjemplos
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // El connectionString debe venir de un archivo de configuraciones!
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-MUBHD36;Initial Catalog=PruebaEfCoreConsola;Integrated Security=True")
+            optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=PruebaEfCoreConsola;Integrated Security=True")
                 .EnableSensitiveDataLogging(true)
                 .UseLoggerFactory(new LoggerFactory().AddConsole((category, level) => level == LogLevel.Information && category == DbLoggerCategory.Database.Command.Name, true));
         }

@@ -11,8 +11,74 @@ namespace EFCoreEjemplos
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            
+
+            SeedDatabase();
+
             Console.WriteLine("Listo");
+        }
+
+        // Usar este método para llenar la base de datos con data de prueba
+        static void SeedDatabase()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                context.Database.Migrate();
+
+                if (context.Instituciones.Any())
+                {
+                    // Si ya hay data, no hacer nada.
+                    return;
+                }
+
+
+                var institucion1 = new Institucion();
+                institucion1.Nombre = "Institucion 1";
+
+                var estudiante1 = new Estudiante();
+                estudiante1.Nombre = "Felipe";
+                estudiante1.Edad = 999;
+
+                var estudiante2 = new Estudiante();
+                estudiante2.Nombre = "Claudia";
+                estudiante2.Edad = 15;
+
+                var estudiante3 = new Estudiante();
+                estudiante3.Nombre = "Roberto";
+                estudiante3.Edad = 25;
+
+                var direccion1 = new Direccion();
+                direccion1.Calle = "Avenida Siempreviva 123";
+                estudiante1.Direccion = direccion1;
+
+                var curso1 = new Curso();
+                curso1.Nombre = "Calculo";
+
+                var curso2 = new Curso();
+                curso2.Nombre = "Algebra Lineal";
+
+                var institucion2 = new Institucion();
+                institucion2.Nombre = "Institucion 2";
+
+                institucion1.Estudiantes.Add(estudiante1);
+                institucion1.Estudiantes.Add(estudiante2);
+
+                institucion2.Estudiantes.Add(estudiante3);
+
+                context.Add(institucion1);
+                context.Add(institucion2);
+                context.Add(curso1);
+                context.Add(curso2);
+
+                context.SaveChanges();
+
+                var estudianteCurso = new EstudianteCurso();
+                estudianteCurso.Activo = true;
+                estudianteCurso.CursoId = curso1.Id;
+                estudianteCurso.EstudianteId = estudiante1.Id;
+
+                context.Add(estudianteCurso);
+                context.SaveChanges();
+            }
         }
 
         static void EjemploInsertarEstudiante()
@@ -142,7 +208,7 @@ namespace EFCoreEjemplos
                 var curso = context.Cursos.FirstOrDefault();
 
                 var estudianteCurso = new EstudianteCurso();
-                
+
                 estudianteCurso.CursoId = curso.Id;
                 estudianteCurso.EstudianteId = estudiante.Id;
                 estudianteCurso.Activo = true;
@@ -160,10 +226,15 @@ namespace EFCoreEjemplos
                     .ThenInclude(y => y.Estudiante).FirstOrDefault();
             }
         }
+
     }
 
     class Institucion
     {
+        public Institucion()
+        {
+            Estudiantes = new List<Estudiante>();
+        }
         public int Id { get; set; }
         public string Nombre { get; set; }
         public List<Estudiante> Estudiantes { get; set; }

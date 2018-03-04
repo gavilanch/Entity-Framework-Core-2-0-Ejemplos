@@ -12,7 +12,7 @@ namespace EFCoreEjemplos
         {
             Console.WriteLine("Hello World!");
 
-            SeedDatabase();
+
 
             Console.WriteLine("Listo");
         }
@@ -224,6 +224,16 @@ namespace EFCoreEjemplos
             {
                 var curso = context.Cursos.Where(x => x.Id == 1).Include(x => x.EstudiantesCursos)
                     .ThenInclude(y => y.Estudiante).FirstOrDefault();
+            }
+        }
+
+        static void StringInterpolationEnEF2()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var nombre = "'Felipe' or 1=1";
+                // Así evitamos SQL Injection
+                var estudiante = context.Estudiantes.FromSql($"select * from Estudiantes where Nombre = {nombre}").ToList();
             }
         }
 

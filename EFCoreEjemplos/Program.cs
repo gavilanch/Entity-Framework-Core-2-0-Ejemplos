@@ -13,7 +13,6 @@ namespace EFCoreEjemplos
             Console.WriteLine("Hello World!");
 
 
-
             Console.WriteLine("Listo");
         }
 
@@ -76,7 +75,13 @@ namespace EFCoreEjemplos
                 estudianteCurso.CursoId = curso1.Id;
                 estudianteCurso.EstudianteId = estudiante1.Id;
 
+                var estudianteCurso2 = new EstudianteCurso();
+                estudianteCurso2.Activo = false;
+                estudianteCurso2.CursoId = curso1.Id;
+                estudianteCurso2.EstudianteId = estudiante2.Id;
+
                 context.Add(estudianteCurso);
+                context.Add(estudianteCurso2);
                 context.SaveChanges();
             }
         }
@@ -234,6 +239,15 @@ namespace EFCoreEjemplos
                 var nombre = "'Felipe' or 1=1";
                 // Así evitamos SQL Injection
                 var estudiante = context.Estudiantes.FromSql($"select * from Estudiantes where Nombre = {nombre}").ToList();
+            }
+        }
+
+        static void FiltroPorTipo()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                // El filtro definido en el ApplicationDbContext.cs se aplica automáticamente
+                var estudiantesCursos = context.EstudiantesCursos.ToList();
             }
         }
 

@@ -21,6 +21,9 @@ namespace EFCoreEjemplos
         {
             // Agregamos una llave compuesta para tabla EstudiantesCursos
             modelBuilder.Entity<EstudianteCurso>().HasKey(x => new { x.CursoId, x.EstudianteId });
+
+            // Filtro por tipo
+            modelBuilder.Entity<EstudianteCurso>().HasQueryFilter(x => x.Activo == true);
         }
 
         public DbSet<Estudiante> Estudiantes { get; set; }

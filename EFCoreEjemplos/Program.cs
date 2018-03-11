@@ -12,7 +12,6 @@ namespace EFCoreEjemplos
         {
             Console.WriteLine("Hello World!");
 
-
             Console.WriteLine("Listo");
         }
 
@@ -251,6 +250,17 @@ namespace EFCoreEjemplos
             }
         }
 
+        static void BorradoSuave()
+        {
+            // El estudiante no será borrado (Ver SaveChanges en ApplicationDbContext
+            using (var context = new ApplicationDbContext())
+            {
+                var estudiante = context.Estudiantes.FirstOrDefault();
+                context.Remove(estudiante);
+                context.SaveChanges();
+            }
+        }
+
     }
 
     class Institucion
@@ -270,6 +280,7 @@ namespace EFCoreEjemplos
         public string Nombre { get; set; }
         public int Edad { get; set; }
         public int InstitucionId { get; set; }
+        public bool EstaBorrado { get; set; }
         public Direccion Direccion { get; set; }
         public List<EstudianteCurso> EstudiantesCursos { get; set; }
     }

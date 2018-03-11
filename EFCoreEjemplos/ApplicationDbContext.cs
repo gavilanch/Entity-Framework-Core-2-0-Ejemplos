@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EFCoreEjemplos
@@ -23,7 +24,21 @@ namespace EFCoreEjemplos
             modelBuilder.Entity<EstudianteCurso>().HasKey(x => new { x.CursoId, x.EstudianteId });
 
             // Filtro por tipo
-            modelBuilder.Entity<EstudianteCurso>().HasQueryFilter(x => x.Activo == true);
+          //  modelBuilder.Entity<EstudianteCurso>().HasQueryFilter(x => x.Activo == true);
+        }
+
+        public override int SaveChanges()
+        {
+            // Borrado Suave
+            foreach (var item in ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Deleted &&
+               e.Metadata.GetProperties().Any(x => x.Name == "EstaBorrado")))
+            {
+                item.State = EntityState.Unchanged;
+                item.CurrentValues["EstaBorrado"] = true;
+            }
+
+            return base.SaveChanges();
         }
 
         public DbSet<Estudiante> Estudiantes { get; set; }

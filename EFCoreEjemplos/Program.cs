@@ -261,6 +261,17 @@ namespace EFCoreEjemplos
             }
         }
 
+        static void EjemploConcurrencyCheck()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var est = context.Estudiantes.FirstOrDefault();
+                est.Nombre += " 2";
+                est.Edad += 1;
+                context.SaveChanges();
+            }
+        }
+
     }
 
     class Institucion
@@ -277,6 +288,7 @@ namespace EFCoreEjemplos
     class Estudiante
     {
         public int Id { get; set; }
+        [ConcurrencyCheck]
         public string Nombre { get; set; }
         public int Edad { get; set; }
         public int InstitucionId { get; set; }

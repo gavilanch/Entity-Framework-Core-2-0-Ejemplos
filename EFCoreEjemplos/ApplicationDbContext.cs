@@ -46,5 +46,12 @@ namespace EFCoreEjemplos
         public DbSet<Institucion> Instituciones { get; set; }
         public DbSet<Curso> Cursos { get; set; }
         public DbSet<EstudianteCurso> EstudiantesCursos { get; set; }
+
+        [DbFunction(Schema = "dbo")]
+        public static int Cantidad_De_Cursos_Activos(int EstudianteId)
+        {
+            throw new Exception();
+        }
+
     }
 }

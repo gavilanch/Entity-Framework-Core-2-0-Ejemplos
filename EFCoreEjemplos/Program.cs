@@ -272,6 +272,14 @@ namespace EFCoreEjemplos
             }
         }
 
+        static void FuncionEscalarEnEF()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var estudiantes = context.Estudiantes
+                    .Where(x => ApplicationDbContext.Cantidad_De_Cursos_Activos(x.Id) > 0).ToList();
+            }
+        }
     }
 
     class Institucion

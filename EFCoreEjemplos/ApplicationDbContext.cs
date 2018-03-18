@@ -24,7 +24,13 @@ namespace EFCoreEjemplos
             modelBuilder.Entity<EstudianteCurso>().HasKey(x => new { x.CursoId, x.EstudianteId });
 
             // Filtro por tipo
-          //  modelBuilder.Entity<EstudianteCurso>().HasQueryFilter(x => x.Activo == true);
+            //  modelBuilder.Entity<EstudianteCurso>().HasQueryFilter(x => x.Activo == true);
+
+            // Table splitting
+            modelBuilder.Entity<Estudiante>().HasOne(x => x.Detalles)
+                .WithOne(x => x.Estudiante)
+                .HasForeignKey<EstudianteDetalle>(x => x.Id);
+            modelBuilder.Entity<EstudianteDetalle>().ToTable("Estudiantes");
         }
 
         public override int SaveChanges()

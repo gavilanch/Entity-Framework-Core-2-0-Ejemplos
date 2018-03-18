@@ -28,21 +28,25 @@ namespace EFCoreEjemplos
                     return;
                 }
 
-
                 var institucion1 = new Institucion();
                 institucion1.Nombre = "Institucion 1";
 
                 var estudiante1 = new Estudiante();
                 estudiante1.Nombre = "Felipe";
                 estudiante1.Edad = 999;
+                estudiante1.Detalles = new EstudianteDetalle() { Becado = true, CategoriaDePago = 1 };
 
                 var estudiante2 = new Estudiante();
                 estudiante2.Nombre = "Claudia";
                 estudiante2.Edad = 15;
+                estudiante2.Detalles = new EstudianteDetalle() { Becado = false, Carrera = "Ingeniería de Software", CategoriaDePago = 1 };
+
 
                 var estudiante3 = new Estudiante();
                 estudiante3.Nombre = "Roberto";
                 estudiante3.Edad = 25;
+                estudiante3.Detalles = new EstudianteDetalle() { Becado = true, Carrera = "Licenciatura en Derecho", CategoriaDePago = 2 };
+
 
                 var direccion1 = new Direccion();
                 direccion1.Calle = "Avenida Siempreviva 123";
@@ -280,6 +284,30 @@ namespace EFCoreEjemplos
                     .Where(x => ApplicationDbContext.Cantidad_De_Cursos_Activos(x.Id) > 0).ToList();
             }
         }
+
+        static void FuncionalidadTableSplitting()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                // Para insertar un nuevo estudiante ahora necesitamos colocar la info del detalle
+                //var estudiante = new Estudiante();
+                //estudiante.Nombre = "Carlos";
+                //estudiante.Edad = 45;
+                //estudiante.EstaBorrado = false;
+                //estudiante.InstitucionId = 1;
+
+                //var detalle = new EstudianteDetalle();
+                //detalle.Becado = false;
+                //detalle.Carrera = "Lic. en Matemáticas";
+                //detalle.CategoriaDePago = 1;
+
+                //estudiante.Detalles = detalle;
+                //context.Add(estudiante);
+                //context.SaveChanges();
+
+                var estudiantes = context.Estudiantes.Include(x => x.Detalles).ToList();
+            }
+        }
     }
 
     class Institucion
@@ -303,6 +331,16 @@ namespace EFCoreEjemplos
         public bool EstaBorrado { get; set; }
         public Direccion Direccion { get; set; }
         public List<EstudianteCurso> EstudiantesCursos { get; set; }
+        public EstudianteDetalle Detalles { get; set; }
+    }
+
+    class EstudianteDetalle
+    {
+        public int Id { get; set; }
+        public bool Becado { get; set; }
+        public string Carrera { get; set; }
+        public int CategoriaDePago { get; set; }
+        public Estudiante Estudiante { get; set; }
     }
 
     class Direccion

@@ -31,6 +31,9 @@ namespace EFCoreEjemplos
                 .WithOne(x => x.Estudiante)
                 .HasForeignKey<EstudianteDetalle>(x => x.Id);
             modelBuilder.Entity<EstudianteDetalle>().ToTable("Estudiantes");
+
+            // Mapeo Flexible
+            modelBuilder.Entity<Estudiante>().Property(x => x.Apellido).HasField("_Apellido");
         }
 
         public override int SaveChanges()

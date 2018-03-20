@@ -329,6 +329,17 @@ namespace EFCoreEjemplos
         public int Edad { get; set; }
         public int InstitucionId { get; set; }
         public bool EstaBorrado { get; set; }
+
+        private string _Apellido;
+
+        public string Apellido
+        {
+            get { return _Apellido; }
+            set
+            {
+                _Apellido = value.ToUpper();
+            }
+        }
         public Direccion Direccion { get; set; }
         public List<EstudianteCurso> EstudiantesCursos { get; set; }
         public EstudianteDetalle Detalles { get; set; }
